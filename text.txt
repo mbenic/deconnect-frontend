@@ -1,3 +1,6 @@
+remember to add vercel.json file when depolying to vercel 
+otherwise you get 404 errors 
+
 filtering 
 you can filter on the frontend, but for your app, you really shouldn’t rely on it long-term.
 Real-world apps don’t do this
