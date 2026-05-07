@@ -143,7 +143,7 @@ if (!project) return <div>Not found</div>;
 
               <div className="flex flex-wrap gap-4 mt-4 text-[14px] font-medium text-primary">
                 <span>📍 {project.city}</span>
-                <span>🏢 {project.industry}</span>
+                <span>🏢 {project.industries?.join(", ")}</span>
                 <span>💰 {formatBudget(project.budget)}</span>
               </div>
             </div>
