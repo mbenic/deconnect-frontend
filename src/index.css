@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+
+:root {
+    --color-background: #FFFFFF;
+    --color-foreground: #001E00;
+    --color-primary: #14A800;
+    --color-primary-foreground: #FFFFFF;
+    --color-primary-dark: #108A00;
+    --color-primary-dark-foreground: #FFFFFF;
+    --color-banner: #DBF1D2;
+    --color-banner-foreground: #001E00;
+    --color-muted: #F7F4EF;
+    --color-muted-foreground: #5E6D55;
+    --color-card: #FFFFFF;
+    --color-card-foreground: #001E00;
+    --color-surface: #F2F7F2;
+    --color-surface-foreground: #001E00;
+    --color-dark: #14160F;
+    --color-dark-foreground: #FFFFFF;
+    --color-icon-bg: #E4F1DD;
+    --color-icon-bg-foreground: #14A800;
+    --color-border: #E4E2E0;
+    --color-input: #D5D3D1;
+    --color-ring: #14A800;
+    --font-heading: "Bricolage Grotesque", Georgia, serif;
+    --font-sans: "DM Sans", system-ui, sans-serif;
+    --section-spacing: 96px;
+    --section-spacing-mobile: 56px
+}
+
+
+.bg-background {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-background) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-banner {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-banner) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-blue-50 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1))
+}
+
+.bg-card {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-card) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-dark {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-dark) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-dark-foreground\/15 {
+    background-color: color-mix(in srgb,var(--color-dark-foreground) 15%,transparent)
+}
+
+.bg-foreground {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-foreground) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-foreground\/40 {
+    background-color: color-mix(in srgb,var(--color-foreground) 40%,transparent)
+}
+
+.bg-icon-bg {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-icon-bg) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-primary {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-primary) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-primary\/10 {
+    background-color: color-mix(in srgb,var(--color-primary) 10%,transparent)
+}
+
+.bg-primary\/5 {
+    background-color: color-mix(in srgb,var(--color-primary) 5%,transparent)
+}
+
+.bg-red-50 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1))
+}
+
+.bg-surface {
+    --tw-bg-opacity: 1;
+    background-color: color-mix(in srgb,var(--color-surface) calc(100% * var(--tw-bg-opacity, 1)),transparent)
+}
+
+.bg-transparent {
+    background-color: transparent
+}
+
+.bg-gradient-to-r {
+    background-image: linear-gradient(to right,var(--tw-gradient-stops))
+}
+
+.text-background {
+    --tw-text-opacity: 1;
+    color: color-mix(in srgb,var(--color-background) calc(100% * var(--tw-text-opacity, 1)),transparent)
+}
+
+
+/* Additional custom styles can be added here */
+ 

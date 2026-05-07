@@ -1,0 +1,45 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+src/components/LoginModal1.jsx
+src/components/LoginModal2.jsx
+src/components/SignupModal copy.jsx
+
+src/pages/BrowseProjects1.jsx
+src/pages/DevProfile1.jsx
+src/pages/DevProfile2.jsx
+src/pages/ProjectDetail1.jsx
+src/pages/SubmitProject1.jsx
+src/pages/JoinAsDev1.jsx
+
+
+
+

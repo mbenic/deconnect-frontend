@@ -1,0 +1,100 @@
+filtering 
+you can filter on the frontend, but for your app, you really shouldn’t rely on it long-term.
+Real-world apps don’t do this
+
+Apps like:
+
+GitHub
+LinkedIn
+Airbnb
+
+👉 ALWAYS filter on the backend
+
+Because:
+
+databases are optimized for filtering
+frontend is not
+
+For YOUR app specifically
+
+You are building:
+
+developer marketplace
+search + filters
+profiles
+projects
+
+👉 This is 100% backend-filtered territory
+
+⚖️ Simple rule to remember
+
+If data comes from an API → filter on the API
+If data is static/local → filter in React
+
+
+
+Backend shape of each project for project detail page (important)
+
+Your Django API should return something like:
+
+{
+  "id": 1,
+  "title": "The Wellness App",
+  "description": "Build a wellness tracker...",
+  "city": "Perth",
+  "industry": "Health & Fitness",
+  "budget": "under_500",
+  "timeline": "3_weeks",
+  "type": "Volunteer",
+  "stage": "Just an idea",
+  "skills": ["React", "Laravel"],
+  "created_at": "2026-04-26",
+  "owner": {
+    "name": "Maria Benic",
+    "email": "mbenic@hotmail.com"
+  }
+}
+
+
+Backend shape for each dev for dev profile page
+
+{
+  "id": 1,
+  "name": "Maria Benic",
+  "email": "mbenic@hotmail.com",
+
+  "city": "Perth",
+  "experience": "Mid-level",
+
+  "about": "Full-stack developer focused on building scalable apps...",
+
+  "availability": "part_time",
+  "work_preference": "remote",
+
+  "skills": [
+    "HTML/CSS",
+    "JavaScript",
+    "React",
+    "Laravel",
+    "PostgreSQL"
+  ],
+
+  "industries": [
+    "Health & Wellness"
+  ],
+
+  "vibes": [
+    "I work best async",
+    "I’m a finisher not just a starter"
+  ],
+
+  "links": {
+    "portfolio": "https://mysite.com",
+    "linkedin": "https://linkedin.com/in/maria",
+    "github": "https://github.com/maria"
+  },
+
+  "projects": "Built multiple SaaS products...",
+
+  "created_at": "2026-04-01"
+}
