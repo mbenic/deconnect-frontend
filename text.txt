@@ -1,3 +1,5 @@
+https://deconnect-frontend.vercel.app/
+
 remember to add vercel.json file when depolying to vercel 
 otherwise you get 404 errors 
 

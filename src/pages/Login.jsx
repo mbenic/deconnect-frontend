@@ -41,7 +41,7 @@ export default function Login() {
  return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto mt-20 space-y-4 p-6 border rounded shadow-md bg-white"
+      className="max-w-md mx-auto m-20 space-y-4 p-6 border rounded shadow-md bg-white"
     >
       <h1 className="text-2xl font-bold text-center mb-4">Login</h1>
 
@@ -68,7 +68,7 @@ export default function Login() {
       <button
         type="submit"
         className={`w-full p-3 rounded text-white ${
-          loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+          loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-primary-dark"
         }`}
         disabled={loading}
       >

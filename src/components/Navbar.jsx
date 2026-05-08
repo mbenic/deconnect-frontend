@@ -25,10 +25,10 @@ const [showLoginModal, setShowLoginModal] = useState(false);
    <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
   <div className="mx-auto flex h-[72px] max-w-[1320px] items-center justify-between px-5 md:px-10">
     <div className="flex items-center gap-10">
-      <a
+      <NavLink
         className="flex items-center gap-2"
         aria-label="DevConnect home"
-        href="/"
+        to="/"
         
       >
         <svg
@@ -53,50 +53,41 @@ const [showLoginModal, setShowLoginModal] = useState(false);
         >
           devconnect
         </span>
-      </a>
+      </NavLink>
       <nav className="hidden md:flex items-center gap-7">
-        <a
+        <NavLink
          
           className="text-[15px] font-medium transition-colors hover:text-primary text-foreground"
-          href="/devs"
+          to="/devs"
          
         >
           Devs
-        </a>
-        <a
-          
+        </NavLink>
+        <NavLink
+         
           className="text-[15px] font-medium transition-colors hover:text-primary text-foreground"
-          href="/projects"
+          to="/projects"
          
         >
           Projects
-        </a>
-        <a
+        </NavLink>
+        <NavLink
          
           className="text-[15px] font-medium transition-colors hover:text-primary text-primary"
-          href="/join-as-dev"
+          to="/join-as-dev"
          
           aria-current="page"
         >
           Join as Dev
-        </a>
-        <a
+        </NavLink>
+        <NavLink
          
           className="text-[15px] font-medium transition-colors hover:text-primary text-foreground"
-          href="/submit-project"
+          to="/submit-project"
         
         >
           Submit project
-        </a>
-        {/* <a
-         
-          className="text-[15px] font-medium transition-colors hover:text-primary text-foreground"
-          href="/pricing"
-          
-        >
-          Pricing
-        </a> */}
-
+        </NavLink>
 
       </nav>
     </div>
@@ -110,14 +101,14 @@ const [showLoginModal, setShowLoginModal] = useState(false);
       >
         Log in
       </button>
-      <a
+      <NavLink  
         className="rounded-full bg-primary px-5 py-2.5 text-[15px] font-semibold text-primary-foreground transition-all hover:bg-primary-dark active:scale-[0.98]"
         data-text-id="nav.postProject"
-        href="/submit-project"
+        to="/submit-project"
         data-discover="true"
       >
         Post a project
-      </a>
+      </NavLink>
     </div>  )}
       {user && (
     <div className="hidden md:flex items-center gap-5">
@@ -130,26 +121,56 @@ const [showLoginModal, setShowLoginModal] = useState(false);
       </button>
     </div>  )}
 
-    <button className="md:hidden text-foreground" aria-label="Toggle menu">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={26}
-        height={26}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-menu"
-        aria-hidden="true"
-      >
-        <path d="M4 5h16" />
-        <path d="M4 12h16" />
-        <path d="M4 19h16" />
-      </svg>
-    </button>
+    {/* Mobile Button */}
+        <button className="md:hidden text-2xl" onClick={() => setOpen(!open)}>
+          ☰
+        </button>
   </div>
+
+      {/* Mobile Menu */}
+      {open && (
+        <div className="md:hidden px-6 pb-4 space-y-2">
+          <NavLink to="/" className="block" onClick={() => setOpen(false)}>
+            Home
+          </NavLink>
+          <NavLink to="/devs" className="block" onClick={() => setOpen(false)}>
+            Devs
+          </NavLink>
+           <NavLink to="/projects" className="block" onClick={() => setOpen(false)}>
+            Projects
+          </NavLink>
+           <NavLink to="/join-as-dev" className="block" onClick={() => setOpen(false)}>
+            Join as Dev
+          </NavLink>
+           <NavLink to="/submit-project" className="block" onClick={() => setOpen(false)}>
+            Submit Project
+          </NavLink>
+          {!user && (
+            <>
+              <NavLink to="/login" className="block" onClick={() => setOpen(false)}>
+                Login
+              </NavLink>
+             
+            </>
+          )}
+          {user && (
+            <>
+             
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setOpen(false);
+                }}
+                className="inline-block bg-red-500 px-3 py-1 rounded text-white text-left"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+  
     
     {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
 </header>
