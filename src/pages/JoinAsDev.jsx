@@ -41,10 +41,11 @@ export default function JoinAsDev() {
   
 
   const toggleItem = (id, setState) => {
+     const numId = Number(id);
   setState(prev =>
-    prev.includes(id)
-      ? prev.filter(item => item !== id) // remove
-      : [...prev, id] // add
+    prev.includes(numId)
+      ? prev.filter(item => item !== numId) // remove
+      : [...prev, numId] // add
   );
 };
 
@@ -76,9 +77,9 @@ export default function JoinAsDev() {
       stage: form.stage,
 
       // ManyToMany fields (IDs only)
-      skills: selectedSkills,
-      vibes: selectedVibes,
-      industries: selectedIndustries,
+      skills: selectedSkills.map(Number),
+      vibes: selectedVibes.map(Number),
+      industries: selectedIndustries.map(Number),
     };
 
     console.log("Submitting payload:", payload);
@@ -243,7 +244,7 @@ export default function JoinAsDev() {
                   items={cat.skills}
                   selected={selectedSkills}
                   onToggle={(item) =>
-                  toggleItem(item.id, setSelectedSkills)
+                  toggleItem(Number(item.id), setSelectedSkills)
                   }
                 />
               </div>
@@ -255,7 +256,7 @@ export default function JoinAsDev() {
               items={choices.industries}
               selected={selectedIndustries}
               onToggle={(item) =>
-                toggleItem(item.id, setSelectedIndustries)
+                toggleItem(Number(item.id), setSelectedIndustries)
               }
             />
           </Section>
@@ -274,7 +275,7 @@ export default function JoinAsDev() {
               items={choices.vibes}
               selected={selectedVibes}
               onToggle={(item) =>
-                toggleItem(item.id, setSelectedVibes)
+                toggleItem(Number(item.id), setSelectedVibes)
               }
             />
           </Section>
