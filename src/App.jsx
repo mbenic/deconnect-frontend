@@ -10,6 +10,7 @@ import BrowseDevs from './pages/BrowseDevs';
 import BrowseProjects from './pages/BrowseProjects';
 import DevProfile from './pages/DevProfile';
 import ProjectDetail from './pages/ProjectDetail';
+import EditProject from './pages/EditProject';
 import Login from './pages/Login';
 
 function App() {
