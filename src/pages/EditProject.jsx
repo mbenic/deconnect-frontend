@@ -45,6 +45,13 @@ const choices = useContext(ChoicesContext);
       .then((res) => res.json())
       .then((data) => {
 
+            // Check ownership FIRST
+          if (data.owner.id !== user.user_id) {
+            //alert("You don't have permission to edit this project.");
+            navigate("/");
+            return;
+          }
+
           setProject({
             fullName: data.owner.first_name + " " + data.owner.last_name,
             title: data.title || "",
