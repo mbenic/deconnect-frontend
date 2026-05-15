@@ -28,9 +28,10 @@ function App() {
       {/* <Route path="/register" element={<Register />} />
       <Route path="/create-project" element={<CreateProject />} />
       <Route path="/projects/:id" element={<ProjectDetails />} />
-      <Route path="/projects/:id/edit" element={<EditProject />} /> */}
+      */}
       <Route path="/devs/:id" element={<DevProfile />} />
       <Route path="/projects/:id" element={<ProjectDetail />} />
+      <Route path="/projects/:id/edit" element={<EditProject />} />
       <Route path="*" element={<h1 className="text-center mt-20 text-3xl">404 - Page Not Found</h1>} />
     </Routes>
     <Footer />

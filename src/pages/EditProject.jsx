@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import SignupModal from "../components/SignUpModal";
 import LoginModal from "../components/LoginModal";
 import { API_URL } from "../config";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate , useParams} from "react-router-dom";
 
 
 import { ChoicesContext } from "../context/ChoicesContext";
@@ -10,22 +10,18 @@ import { AuthContext } from "../context/AuthContext";
 
 
 
-export default function SubmitProject() {
-  const [showModal, setShowModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+export default function EditProject() {
+  const { id } = useParams();
   const { user, token, loading } = useContext(AuthContext);
   const navigate = useNavigate();
-
-
   
 
 const choices = useContext(ChoicesContext);
 
 
-  const [form, setForm] = useState({
+  const [project, setProject] = useState({
     fullName: "",
-    email: "",
-    projectName: "",
+    title: "",
     industry: "",
     description: "",
     timeline: "",
@@ -37,22 +33,48 @@ const choices = useContext(ChoicesContext);
 
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-
-  // if (user === null) return <p>Loading...</p>;
-
-  // if (!user) return <Navigate to="/login" />;
-
+  
 
   //  loading state
  if (loading) return <p>Loading...</p>;
 
-   
+  
+ // Fetch project data
+  useEffect(() => {
+    fetch(`${API_URL}/projects/${id}/`)
+      .then((res) => res.json())
+      .then((data) => {
+
+          setProject({
+            fullName: data.owner.first_name + " " + data.owner.last_name,
+            title: data.title || "",
+            description: data.description || "",
+
+            city: data.city || "",
+            type: data.type || "",
+            budget: data.budget || "",
+            timeline: data.timeline || "",
+            stage: data.stage || "",
+
+            industry: data.industries?.[0]?.id || "",
+          });
+
+          setSelectedSkills(
+            data.skills?.map((skill) => skill.id) || []
+          );
+        })
+      .catch((err) => {
+        console.error("Error fetching project:", err);
+       
+      });
+  }, [id]);
+
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setForm((prev) => ({
+    setProject((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -82,25 +104,23 @@ const choices = useContext(ChoicesContext);
   
   try {
     const payload = {
-      title: form.title,
-      description: form.description,
-      city: form.city,
-      type: form.type,
-      budget: form.budget,
-      timeline: form.timeline,
-      stage: form.stage,
+      title: project.title,
+      description: project.description,
+      city: project.city,
+      type: project.type,
+      budget: project.budget,
+      timeline: project.timeline,
+      stage: project.stage,
 
       // ManyToMany fields (IDs only)
       skills_needed: selectedSkills,
-      industries: Array.isArray(form.industry)
-        ? form.industry
-        : [form.industry], // adjusted depending on UI
+      industries: project.industry ? [project.industry] : [],
     };
 
     console.log("Submitting payload:", payload);
 
-    const res = await fetch(`${API_URL}/projects/`, {
-      method: "POST",
+    const res = await fetch(`${API_URL}/projects/${id}/`, {
+      method: "PATCH",  
       headers: {
         "Content-Type": "application/json",
          Accept: "application/json",
@@ -129,12 +149,11 @@ const choices = useContext(ChoicesContext);
     }
 
     const data = await res.json();
-    console.log("Project created:", data);
+    console.log("Project updated:", data);
 
     // reset
-    setForm({
+    setProject({
       fullName: "",
-      email: "",
       title: "",
       description: "",
       industry: "",
@@ -147,58 +166,56 @@ const choices = useContext(ChoicesContext);
 
     setSelectedSkills([]);
 
-    // navigate("/projects/"); // redirect to projects page
-    navigate(`/projects/${data.id}`); // Redirect to the newly created project page
+    //navigate("/projects/"); // redirect to projects page
+     navigate(`/projects/${id}`); // Redirect to the newly created project page
 
   } catch (err) {
-    console.error("Submit failed:", err);
+    console.error("Update failed:", err);
   }
 };
 
 
+
+const handleDelete = async () => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this project?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`${API_URL}/projects/${id}/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to delete project");
+    }
+
+    alert("Project deleted");
+
+    navigate("/projects");
+
+  } catch (err) {
+    console.error(err);
+    alert("Delete failed");
+  }
+};
+
   return (
     <main className="bg-surface pb-24 pt-12 md:pt-16">
-      {/* MODALS */}
-      {showModal && <SignupModal onClose={() => setShowModal(false)} />}
-      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-
       {/* HEADER */}
       <div className="mx-auto max-w-[820px] px-5 md:px-10 mb-12 md:mb-14">
         
-        {/* If user is not logged in, show banner */}
-        {!user && (
-        <div className="mb-8">
-          <div className="rounded-[16px] border border-primary/20 bg-banner px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-            <p className="text-[14px] text-banner-foreground">
-              Save your progress and get matched faster by creating a free account.
-            </p>
-
-            <div className="flex items-center gap-3">
-              <button
-                className="text-[14px] font-semibold text-primary hover:underline"
-                onClick={() => setShowLoginModal(true)}
-              >
-                Log in
-              </button>
-
-              <span className="text-muted-foreground text-[13px]">or</span>
-
-              <button
-                onClick={() => setShowModal(true)}
-                className="rounded-full bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground hover:bg-primary-dark"
-              >
-                Create account
-              </button>
-            </div>
-          </div>
-        </div> )}
-
         <h1 className="text-[40px] sm:text-[52px] md:text-[64px] font-semibold text-foreground">
-          Submit a project
+          Edit project
         </h1>
 
         <p className="mt-5 text-muted-foreground max-w-[600px]">
-          Tell us what you're building. We'll match you with developers.
+          This project belongs to {project.fullName || "unknown user"}. Edit the details and update the project information here.
         </p>
       </div>
 
@@ -209,32 +226,32 @@ const choices = useContext(ChoicesContext);
           {/* BASICS */}
           <Section title="The basics">
             <div className="grid gap-5 sm:grid-cols-2">
-              <Input
+              {/* <Input
                 label="Full name"
                 name="fullName"
-                value={form.fullName}
+                value={project.fullName}
                 onChange={handleChange}
-              />
+              /> */}
 
-              <Input
+              {/* <Input
                 label="Email"
                 name="email"
-                value={form.email}
+                value={project.email}
                 onChange={handleChange}
                 type="email"
-              />
+              /> */}
 
               <Input
                 label="Project name"
                 name="title"
-                value={form.title}
+                value={project.title}
                 onChange={handleChange}
               />
 
               <Select
                 label="Industry"
                 name="industry"
-                value={form.industry}
+                value={project.industry}
                 onChange={handleChange}
                 // options={INDUSTRIES}
                 options={choices.industries}
@@ -244,14 +261,14 @@ const choices = useContext(ChoicesContext);
             <Textarea
               label="Description"
               name="description"
-              value={form.description}
+              value={project.description}
               onChange={handleChange}
             />
           </Section>
 
           {/* SKILLS */}
           <Section title="Skills & tech stack">
-            {choices.skills.map((cat) => (
+            {choices?.skills?.map((cat) => (
               <div key={cat.label}>
                 <h3 className="text-[13px] font-semibold uppercase text-muted-foreground mb-2">
                   {cat.label}
@@ -274,57 +291,67 @@ const choices = useContext(ChoicesContext);
               <Select
                 label="Timeline"
                 name="timeline"
-                value={form.timeline}
+                value={project.timeline}
                 onChange={handleChange}
                 // options={TIMELINES}
-                options={choices.timeline}
+                options={choices?.timeline || []}
               />
 
               <Select
                 label="Opportunity type"
                 name="type"
-                value={form.type}
+                value={project.type}
                 onChange={handleChange}
                 // options={TYPES}
-                options={choices.type}
+                options={choices?.type || []}
               />
 
               <Select
                 label="Budget"
                 name="budget"
-                value={form.budget}
+                value={project.budget}
                 onChange={handleChange}
                 // options={BUDGETS}
-                options={choices.budget}
+                options={choices.budget || []}
               />
 
               <Select
                 label="Project stage"
                 name="stage"
-                value={form.stage}
+                value={project.stage}
                 onChange={handleChange}
                 // options={PROJECT_STAGES}
-                options={choices.stage}
+                options={choices?.stage || []}
               />
 
               <Select
                 label="City"
                 name="city"
-                value={form.city}
+                value={project.city}
                 onChange={handleChange}
                 // options={CITIES}
-                options={choices.city}
+                options={choices?.city || []}
               />
             </div>
           </Section>
 
           {/* SUBMIT */}
+          <div className="flex justify-between gap-3"> 
           <button
             type="submit"
             className="w-full rounded-full bg-primary py-4 text-white font-semibold"
           >
-            Submit project
+            Update project
           </button>
+
+          <button
+              type="button"
+              onClick={handleDelete}
+              className="w-full rounded-full border border-red-500 py-4 text-red-500 font-semibold hover:bg-red-50"
+            >
+              Delete project
+            </button>
+          </div>
         </form>
       </div>
     </main>

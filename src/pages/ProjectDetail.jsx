@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { API_URL } from "../config";
-
+import { AuthContext } from "../context/AuthContext"; // new
+import { useContext } from "react"; // new
 
 export default function ProjectDetail() {
   const { id } = useParams();
+  const { user, token } = useContext(AuthContext);
 
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,6 +95,7 @@ useEffect(() => {
         industries: data.industries?.map((i) => i.name) || [],
         created_at: data.created_at,
         owner: {
+          id: data.owner.id,
           name: data.owner.first_name + " " + data.owner.last_name,
           email: data.owner?.email || "",
         },
@@ -110,6 +113,8 @@ useEffect(() => {
   fetchProject();
 }, [id]);
 
+const isOwner = user && project && user.user_id === project.owner.id;
+
 if (loading) return <div>Loading...</div>;
 if (!project) return <div>Not found</div>;
 
@@ -117,7 +122,25 @@ if (!project) return <div>Not found</div>;
     <main className="bg-surface px-5 md:px-10 py-12 md:py-16">
       <div className="mx-auto max-w-[820px] space-y-6">
 
-        <BackLink />
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <BackLink />
+
+            {isOwner && (
+                  <div  className="rounded-full bg-primary px-5 py-2.5 text-[15px] font-semibold text-primary-foreground transition-all hover:bg-primary-dark active:scale-[0.98]">
+                
+                
+                    <NavLink
+                      to={`/projects/${project.id}/edit`}
+                    >
+                      Edit Project
+                    </NavLink>
+              
+                </div>
+
+                
+                )}
+        </div>
+
         
         {/* HERO */}
         <div className="rounded-[24px] border border-border bg-background p-8 md:p-10">
@@ -134,7 +157,7 @@ if (!project) return <div>Not found</div>;
                 </h1>
 
                 <Badge>{project.type}</Badge>
-                <Badge variant="warning">{formatTimeline(project.timeline)}</Badge>
+                <Badge variant="alternate">{formatTimeline(project.timeline)}</Badge>
               </div>
 
               <p className="mt-2 text-[15px] text-muted-foreground">
@@ -220,12 +243,12 @@ if (!project) return <div>Not found</div>;
 
 function BackLink() {
   return (
-    <a
-      href="/projects"
+    <NavLink
+      to="/projects"
       className="inline-flex items-center gap-1.5 text-[14px] font-medium text-muted-foreground hover:text-primary transition-colors mb-10"
     >
       ← Browse projects
-    </a>
+    </NavLink>
   );
 }
 
@@ -251,7 +274,7 @@ function Tag({ children }) {
 
 function Badge({ children, variant }) {
   const styles =
-    variant === "warning"
+    variant === "alternate"
       ? "bg-amber-50 border-amber-200 text-amber-700"
       : "bg-surface border-border text-foreground";
 
