@@ -74,7 +74,7 @@ const choices = useContext(ChoicesContext);
         console.error("Error fetching project:", err);
        
       });
-  }, [id]);
+  }, [id, user, navigate]);
 
 
 
