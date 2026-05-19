@@ -50,74 +50,171 @@ export default function JoinAsDev() {
 };
 
 
-  const handleSubmit = async (e) => {
+//   const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+
+//   // Gate here  
+//   if (!user || !token) {
+//     setShowLoginModal(true);
+//     return;
+//   }
+
+
+//   try {
+//     const payload = {
+//       name: form.name,
+//       description: form.description,
+//       city: form.city,
+//       level: form.level,
+//       about: form.about,
+//       portfolio: form.portfolio,
+//       linkedin: form.linkedin,
+//       github: form.github,
+//       availability: form.availability,
+//       work_preference: form.work_preference,
+//       projects: form.projects,
+//       stage: form.stage,
+
+//       // ManyToMany fields (IDs only)
+//       skills: selectedSkills.map(Number),
+//       vibes: selectedVibes.map(Number),
+//       industries: selectedIndustries.map(Number),
+//     };
+
+//     console.log("Submitting payload:", payload);
+
+//     const res = await fetch(`${API_URL}/devs/`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//          Accept: "application/json",
+         
+//         Authorization: `Token ${token}`,
+//       },
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!res.ok) {
+//       const errorData = await res.json();
+//       console.error("Server error:", errorData);
+
+//        // Extract readable message
+//       const messages = Object.entries(errorData)
+//         .map(([key, value]) => {
+//           if (Array.isArray(value)) {
+//             return `${key}: ${value.join(", ")}`;
+//           }
+//           return `${key}: ${value}`;
+//         })
+//         .join("\n");
+
+//       alert((messages || "Submission failed: ") );
+
+//       return;
+//     }
+
+//     const data = await res.json();
+//     console.log("Developer created:", data);
+
+//     // reset
+//     setForm({
+//       name: "",
+//       email: "",
+//       city: "",
+//       level: "",
+//       about: "",
+//       portfolio: "",
+//       linkedin: "",
+//       github: "",
+//       availability: "",
+//       work_preference: "",
+//       projects: "",
+//     });
+
+//     setSelectedSkills([]);
+//     setSelectedIndustries([]);
+//     setSelectedVibes([]);
+
+//     navigate("/devs/"); // redirect to developers page
+
+//   } catch (err) {
+//     console.error("Submit failed:", err);
+//   }
+// };
+
+const handleSubmit = async (e) => {
   e.preventDefault();
 
-
-  // Gate here  
+  // Gate here
   if (!user || !token) {
     setShowLoginModal(true);
     return;
   }
 
+  const payload = {
+    name: form.name,
+    description: form.description,
+    city: form.city,
+    level: form.level,
+    about: form.about,
+    portfolio: form.portfolio,
+    linkedin: form.linkedin,
+    github: form.github,
+    availability: form.availability,
+    work_preference: form.work_preference,
+    projects: form.projects,
+    stage: form.stage,
+
+    // ManyToMany IDs
+    skills: selectedSkills.map(Number),
+    vibes: selectedVibes.map(Number),
+    industries: selectedIndustries.map(Number),
+  };
+
+  console.log("Submitting payload:", payload);
 
   try {
-    const payload = {
-      name: form.name,
-      description: form.description,
-      city: form.city,
-      level: form.level,
-      about: form.about,
-      portfolio: form.portfolio,
-      linkedin: form.linkedin,
-      github: form.github,
-      availability: form.availability,
-      work_preference: form.work_preference,
-      projects: form.projects,
-      stage: form.stage,
-
-      // ManyToMany fields (IDs only)
-      skills: selectedSkills.map(Number),
-      vibes: selectedVibes.map(Number),
-      industries: selectedIndustries.map(Number),
-    };
-
-    console.log("Submitting payload:", payload);
-
     const res = await fetch(`${API_URL}/devs/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-         Accept: "application/json",
-         
+        Accept: "application/json",
         Authorization: `Token ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Server error:", errorData);
+    const data = await res.json();
 
-       // Extract readable message
-      const messages = Object.entries(errorData)
-        .map(([key, value]) => {
-          if (Array.isArray(value)) {
-            return `${key}: ${value.join(", ")}`;
-          }
-          return `${key}: ${value}`;
-        })
+    // Handle backend errors
+    if (!res.ok) {
+      console.error("Server error:", data);
+
+      // Handle existing dev redirect
+      if (data.detail === "Developer profile already exists.") {
+        alert("You already have a developer profile. Redirecting to your profile page.");
+      
+         navigate("/devs/"); // Redirect to developers page
+        return;
+      }
+
+      // Handle normal DRF validation errors
+      const messages = Object.entries(data)
+        .map(([key, value]) =>
+          Array.isArray(value)
+            ? `${key}: ${value.join(", ")}`
+            : `${key}: ${value}`
+        )
         .join("\n");
 
-      alert((messages || "Submission failed: ") );
-
+      alert(messages || "Submission failed");
       return;
     }
 
-    const data = await res.json();
     console.log("Developer created:", data);
 
-    // reset
+    // Reset form
     setForm({
       name: "",
       email: "",
@@ -136,12 +233,14 @@ export default function JoinAsDev() {
     setSelectedIndustries([]);
     setSelectedVibes([]);
 
-    navigate("/devs/"); // redirect to developers page
+    navigate("/devs/");
 
   } catch (err) {
     console.error("Submit failed:", err);
+    alert("Network error. Please try again.");
   }
 };
+
 
   return (
     <main className="bg-surface pb-24 pt-12 md:pt-16">

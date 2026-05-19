@@ -1,11 +1,15 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import { API_URL } from "../config";
 import { ChoicesContext } from "../context/ChoicesContext";
+import { AuthContext } from "../context/AuthContext";
+
  
 
 export default function DevProfile() {
   const { id } = useParams();
+
+   const { user } = useContext(AuthContext);// new
 
   const mockDev = {
     name: "Maria Benic",
@@ -84,14 +88,33 @@ useEffect(() => {
   fetchDev();
 }, [id]);
 
+
+const isOwner = user && dev && user.user_id === dev.user_id; //change from dev.id to dev.user_id
+
 if (loading) return <div>Loading...</div>;
 if (!dev) return <div>Not found</div>;
 
   return (
     <main className="bg-surface px-5 md:px-10 py-12 md:py-16">
       <div className="mx-auto max-w-[820px]">
+         <div className="flex justify-between text-sm text-muted-foreground">
+              <BackLink />  
+            
+              {isOwner && (
+                        <div  className="rounded-full bg-primary px-5 py-2.5 text-[15px] font-semibold text-primary-foreground transition-all hover:bg-primary-dark active:scale-[0.98]">
+                      
+                      
+                          <NavLink
+                            to={`/devs/${dev.id}/edit`}
+                          >
+                            Edit Profile
+                          </NavLink>
+                    
+                      </div>
 
-        <BackLink />
+                      
+                      )}
+            </div>
 
         <ProfileHeader dev={dev} />
 

@@ -11,6 +11,7 @@ import BrowseProjects from './pages/BrowseProjects';
 import DevProfile from './pages/DevProfile';
 import ProjectDetail from './pages/ProjectDetail';
 import EditProject from './pages/EditProject';
+import EditDev from './pages/EditDev';
 import Login from './pages/Login';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Route path="/devs/:id" element={<DevProfile />} />
       <Route path="/projects/:id" element={<ProjectDetail />} />
       <Route path="/projects/:id/edit" element={<EditProject />} />
+      <Route path="/devs/:id/edit" element={<EditDev />}  /> // New route for editing devs
       <Route path="*" element={<h1 className="text-center mt-20 text-3xl">404 - Page Not Found</h1>} />
     </Routes>
     <Footer />
